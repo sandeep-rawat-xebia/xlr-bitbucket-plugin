@@ -61,7 +61,7 @@
         <property name="commitId" category="variables" required="false" description="Id of the commit."/>
         <property name="branch" category="variables" required="false" description="Branch where the commit occurred."/>
         <property name="commitMsg" category="variables" required="false" description="Commit Message."/>
-        <property name="fileChanges" kind="list_of_string" category="variables" required="false" description="List of file changed."/>
+        <property name="fileChanges" category="variables" required="false" description="List of file changed."/>
     </type>
 
 

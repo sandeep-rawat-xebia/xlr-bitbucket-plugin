@@ -41,7 +41,7 @@ def getFileChanges(commit_id):
     response = requests.get(url_path, auth=(server['username'], server['password']), headers={}, verify=False)
     if response.status_code == 200:
         changes = json.loads(response.content)
-        return [v['path']['name'] for v in changes['values']]
+        return ','.join([v['path']['name'] for v in changes['values']])
 
 
 url_path= "%srest/api/1.0/projects/%s/commits?limit=1&until=refs/heads/%s" % (server['url'],repo_full_name,branchName)
