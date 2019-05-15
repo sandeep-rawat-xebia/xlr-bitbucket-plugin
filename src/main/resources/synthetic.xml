@@ -38,6 +38,8 @@
 
         <!-- output variables -->
         <property name="commitId" category="variables" required="false" description="Id of the commit."/>
+        <property name="commitMsg" category="variables" required="false" description="Commit Message."/>
+        <property name="fileChanges" kind="list_of_string" category="variables" required="false" description="List of file changed."/>
         <property name="branch" category="variables" required="false" description="Branch where the commit occurred."/>
     </type>
 
@@ -52,8 +54,8 @@
                   description="Custom password to override global server configuration"/>
         <property name="repo_full_name" category="Repository" required="true" label="Repository Full name"
                   description="Full name eg. TeamName/Repository, Username/Repository"/>
-        <property name="branchName" kind="string" category="Repository" required="false"
-                  description="Optionally Specify branch name if only listening for commits on a single branch"/>
+        <property name="branchName" kind="string" category="Repository" required="true"
+                  description="Specify branch name"/>
         <property name="triggerOnInitialPublish" category="Options" kind="boolean" default="false" required="false"
                   description="Should suppress error when project or repository not found . Set this to true when project or repository doesn't exist yet and you want to trigger a release on the initial publish. Default value is 'false'"/>
 

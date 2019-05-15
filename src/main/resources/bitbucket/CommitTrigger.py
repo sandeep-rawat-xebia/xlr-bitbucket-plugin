@@ -11,6 +11,7 @@
 
 import sys
 import json
+import requests
 
 
 def findNewCommit(oldCommitMap, newCommitMap):
@@ -35,35 +36,38 @@ def findNewCommit(oldCommitMap, newCommitMap):
 
     return branch, commitId
 
+def getFileChanges(commit_id):
+    url_path= "%srest/api/1.0/projects/%s/commits/%s/changes" % (server['url'],repo_full_name,commit_id)
+    response = requests.get(url_path, auth=(server['username'], server['password']), headers={}, verify=False)
+    if response.status_code == 200:
+        changes = json.loads(response.content)
+        return [v['path']['name'] for v in changes['values']]
 
-if server is None:
-    print "No Bitbucket server provided."
-    sys.exit(1)
 
-request = HttpRequest(server, username, password)
-context = "/2.0/repositories/%s/refs" % (repo_full_name)
-branches_path = "%s/%s?limit=1000" % (context, "branches")
-response = request.get(branches_path, contentType='application/json')
+url_path= "%srest/api/1.0/projects/%s/commits?limit=1&until=refs/heads/%s" % (server['url'],repo_full_name,branchName)
 
-if not response.isSuccessful():
-    if response.status == 404 and triggerOnInitialPublish:
+response = requests.get(url_path, auth=(server['username'], server['password']), headers={}, verify=False)
+
+if response.status_code != 200:
+    if response.status_code == 404 and triggerOnInitialPublish:
         print "Repository '%s' not found in bitbucket. Ignoring." % (repo_full_name)
 
         if not triggerState:
             branch = commitId = triggerState = 'unknown'
     else:
         print "Failed to fetch branch information from Bitbucket server %s" % server['url']
-        response.errorDump()
+        response.content
     sys.exit(1)
 else:
-    info = json.loads(response.response)
+    info = json.loads(response.content)
 
     # build a map of the commit ids for each branch
     newCommit = {}
     for branch in info["values"]:
-        branchid = branch["name"]
-        lastcommit = branch["target"]["hash"]
+        branchid = branchName
+        lastcommit = branch["id"]
         newCommit[branchid] = lastcommit
+        commitMsg = branch["message"]
 
     # trigger state is perisisted as json
     newTriggerState = json.dumps(newCommit)
@@ -75,6 +79,7 @@ else:
             oldCommit = json.loads(triggerState)
 
         branch, commitId = findNewCommit(oldCommit, newCommit)
+        fileChanges = getFileChanges(lastcommit)
 
         if branchName == "" or (branchName != "" and branchName == branch):
             triggerState = newTriggerState
