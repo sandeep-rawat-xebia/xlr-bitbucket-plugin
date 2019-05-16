@@ -28,7 +28,7 @@ def getFileChanges(old_commit_id, commits):
             if commit_id == old_commit_id:
                 break;
             result = result + getFileChangesForCommitId(commit_id)
-        return ','.join(result)
+        return ','.join(set(result))
     else:
         return ','.join(getFileChangesForCommitId(commits["values"][0]["id"]))
 
