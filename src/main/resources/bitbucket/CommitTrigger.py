@@ -52,6 +52,7 @@ else:
     newCommit = {}
     commitId = commits["values"][0]["id"]
     newCommit[branchName] = commitId
+    branch = branchName
     commitMsg = commits["values"][0]["message"]
 
     # trigger state is perisisted as json
