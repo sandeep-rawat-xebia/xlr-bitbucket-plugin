@@ -18,7 +18,7 @@ def getFileChangesForCommitId(commit_id):
     response = requests.get(url_path, auth=(server['username'], server['password']), headers={}, verify=False)
     if response.status_code == 200:
         changes = json.loads(response.content)
-        return [v['path']['name'] for v in changes['values']]
+        return [v['path']['toString'] for v in changes['values']]
 
 def getFileChanges(old_commit_id, commits):
     if bool(old_commit_id):
