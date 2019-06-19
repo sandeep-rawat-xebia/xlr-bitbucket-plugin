@@ -62,6 +62,7 @@
         <property name="branch" category="variables" required="false" description="Branch where the commit occurred."/>
         <property name="commitMsg" category="variables" required="false" description="Commit Message."/>
         <property name="fileChanges" category="variables" required="false" description="List of file changed."/>
+        <property name="repoName" category="variables" required="false" description="Repo Name."/>
     </type>
 
 

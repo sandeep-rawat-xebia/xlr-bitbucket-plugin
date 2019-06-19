@@ -54,6 +54,7 @@ else:
     newCommit[branchName] = commitId
     branch = branchName
     commitMsg = commits["values"][0]["message"]
+    repoName = repo_full_name
 
     # trigger state is perisisted as json
     newTriggerState = json.dumps(newCommit)
